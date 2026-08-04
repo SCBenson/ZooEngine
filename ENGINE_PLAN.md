@@ -57,11 +57,11 @@ Ideas you want to build anyway go in `IDEAS.md`. They are respected there. They 
 
 **Goal:** one command builds it, a window opens, a counter ticks.
 
-- [ ] `git init`, `.gitignore` for build artifacts, first commit
-- [ ] Repo layout: `src/`, `assets/`, `vendor/`, `CMakeLists.txt`
-- [ ] CMake building a hello-world binary
-- [ ] SDL3 vendored (FetchContent or submodule) and linking
-- [ ] Window opens, event loop handles quit and window close
+- [X] `git init`, `.gitignore` for build artifacts, first commit
+- [X] Repo layout: `src/`, `assets/`, `vendor/`, `CMakeLists.txt`
+- [X] CMake building a hello-world binary
+- [X] SDL3 vendored (FetchContent or submodule) and linking
+- [X] Window opens, event loop handles quit and window close
 - [ ] Clear screen to a non-black colour
 - [ ] Fixed-timestep loop with an accumulator — separate `update(dt)` from `render(alpha)`
 - [ ] Frame timing: measure frame ms, track a rolling average
