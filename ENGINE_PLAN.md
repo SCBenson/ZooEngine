@@ -62,8 +62,8 @@ Ideas you want to build anyway go in `IDEAS.md`. They are respected there. They 
 - [X] CMake building a hello-world binary
 - [X] SDL3 vendored (FetchContent or submodule) and linking
 - [X] Window opens, event loop handles quit and window close
-- [ ] Clear screen to a non-black colour
-- [ ] Fixed-timestep loop with an accumulator — separate `update(dt)` from `render(alpha)`
+- [X] Clear screen to a non-black colour
+- [X] Fixed-timestep loop with an accumulator — separate `update(dt)` from `render(alpha)`
 - [ ] Frame timing: measure frame ms, track a rolling average
 - [ ] Dear ImGui vendored, initialised, drawing a debug overlay
 - [ ] Overlay shows frame ms, FPS, update count
