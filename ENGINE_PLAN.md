@@ -65,9 +65,9 @@ Ideas you want to build anyway go in `IDEAS.md`. They are respected there. They 
 - [X] Clear screen to a non-black colour
 - [X] Fixed-timestep loop with an accumulator — separate `update(dt)` from `render(alpha)`
 - [X] Frame timing: measure frame ms, track a rolling average
-- [ ] Dear ImGui vendored, initialised, drawing a debug overlay
-- [ ] Overlay shows frame ms, FPS, update count
-- [ ] `README.md` with build instructions that actually work from a clean clone
+- [X] Dear ImGui vendored, initialised, drawing a debug overlay
+- [X] Overlay shows frame ms, FPS, update count
+- [X] `README.md` with build instructions that actually work from a clean clone
 
 **Done when:** clean clone → `cmake --build` → window with live FPS counter.
 
