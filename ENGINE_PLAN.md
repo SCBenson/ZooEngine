@@ -64,7 +64,7 @@ Ideas you want to build anyway go in `IDEAS.md`. They are respected there. They 
 - [X] Window opens, event loop handles quit and window close
 - [X] Clear screen to a non-black colour
 - [X] Fixed-timestep loop with an accumulator — separate `update(dt)` from `render(alpha)`
-- [ ] Frame timing: measure frame ms, track a rolling average
+- [X] Frame timing: measure frame ms, track a rolling average
 - [ ] Dear ImGui vendored, initialised, drawing a debug overlay
 - [ ] Overlay shows frame ms, FPS, update count
 - [ ] `README.md` with build instructions that actually work from a clean clone
