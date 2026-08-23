@@ -1,11 +1,16 @@
 #include <SDL3/SDL.h>
+#include <glad/glad.h>
 #include "imgui.h"
 #include "backends/imgui_impl_sdl3.h"
-#include "backends/imgui_impl_sdlrenderer3.h"
+#include "backends/imgui_impl_opengl3.h"
 
 int main(int argc, char* argv[]) {
 
 	SDL_Init(SDL_INIT_VIDEO);
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
 	SDL_Window* window = SDL_CreateWindow(
 		"ZooEngine",
@@ -13,10 +18,13 @@ int main(int argc, char* argv[]) {
 		SDL_WINDOW_OPENGL
 	);
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(
-		window,
-		NULL
-	);
+	SDL_GLContext glContext = SDL_GL_CreateContext(window);
+	SDL_GL_MakeCurrent(window, glContext);
+
+	if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+		SDL_Log("Failed to initialize glad");
+		return -1;
+	}
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -25,8 +33,8 @@ int main(int argc, char* argv[]) {
 
 	ImGui::StyleColorsDark();
 
-	ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
-	ImGui_ImplSDLRenderer3_Init(renderer);
+	ImGui_ImplSDL3_InitForOpenGL(window, glContext);
+	ImGui_ImplOpenGL3_Init("#version 330 core");
 
 	bool running = true;
 	const double dt = 1.0 / 60.0;
@@ -91,30 +99,30 @@ int main(int argc, char* argv[]) {
 		const float g = (float)(prevGreen + (green - prevGreen) * alpha);
 		const float b = (float)(prevBlue + (blue - prevBlue) * alpha);
 
-		ImGui_ImplSDLRenderer3_NewFrame();
+		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplSDL3_NewFrame();
 		ImGui::NewFrame();
 
 		ImGui::Begin("Debug Overlay");
 		ImGui::Text("Frame: %.2f ms", avgFrameMs);
 		ImGui::Text("FPS: %.1f", fps);
-		ImGui::Text("Update count: %11u", (unsigned long long)updateCount);
+		ImGui::Text("Update count: %llu", (unsigned long long)updateCount);
 		ImGui::End();
 
 		ImGui::Render();
 
-		SDL_SetRenderDrawColorFloat(renderer, r, g, b, SDL_ALPHA_OPAQUE_FLOAT);
-		SDL_RenderClear(renderer);
-		ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
-		SDL_RenderPresent(renderer);
+		glClearColor(r, g, b, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		SDL_GL_SwapWindow(window);
 	}
 
-	ImGui_ImplSDLRenderer3_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL3_Shutdown();
 	ImGui::DestroyContext();
 
+	SDL_GL_DestroyContext(glContext);
 	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	return 0;
 }

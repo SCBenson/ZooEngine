@@ -29,7 +29,7 @@ add_library(imgui STATIC
 	${imgui_SOURCE_DIR}/imgui_widgets.cpp
 	${imgui_SOURCE_DIR}/imgui_demo.cpp
 	${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
-	${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
+	${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
 target_include_directories(imgui PUBLIC
@@ -38,6 +38,14 @@ target_include_directories(imgui PUBLIC
 )
 
 target_link_libraries(imgui PUBLIC SDL3::SDL3)
+
+add_library(glad STATIC
+	vendor/glad/src/glad.c
+)
+
+target_include_directories(glad PUBLIC 
+	vendor/glad/include
+)
 
 add_library(ZooEngine STATIC
 	src/main.cpp
@@ -51,7 +59,7 @@ add_executable(ZooGame
 	game/main.cpp
 )
 
-target_link_libraries(ZooGame PRIVATE ZooEngine SDL3::SDL3 imgui)
+target_link_libraries(ZooGame PRIVATE ZooEngine SDL3::SDL3 imgui glad opengl32)
 
 add_custom_command(TARGET ZooGame POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
