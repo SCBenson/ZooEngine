@@ -25,6 +25,15 @@ int main(int argc, char* argv[]) {
 	float red = 0.0f, green = 0.0f, blue = 0.0f;
 	float prevRed = 0.0f, prevGreen = 0.0f, prevBlue = 0.0f;
 
+	const int FRAME_SAMPLE_COUNT = 100;
+	double frameTimesMs[FRAME_SAMPLE_COUNT] = {};
+	int frameSampleIndex = 0;
+	int frameSamplesFilled = 0;
+	double frameTimeSum = 0.0;
+
+	Uint64 updateCount = 0;
+
+
 	while (running) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -37,6 +46,16 @@ int main(int argc, char* argv[]) {
 		lastTicks = currentTicks;
 
 		if (frameTime > 0.25) frameTime = 0.25;
+
+		const double frameMs = frameTime * 1000.0;
+		frameTimeSum -= frameTimesMs[frameSampleIndex];
+		frameTimesMs[frameSampleIndex] = frameMs;
+		frameTimeSum += frameMs;
+		frameSampleIndex = (frameSampleIndex + 1) % FRAME_SAMPLE_COUNT;
+		if (frameSamplesFilled < FRAME_SAMPLE_COUNT) frameSamplesFilled++;
+
+		const double avgFrameMs = frameTimeSum / frameSamplesFilled;
+		const double fps = avgFrameMs > 0.0 ? (1000.0 / avgFrameMs) : 0.0;
 
 		accumulator += frameTime;
 
@@ -51,6 +70,7 @@ int main(int argc, char* argv[]) {
 			blue = (float)(0.5 + 0.5 * SDL_sin(simTime + SDL_PI_D * 4 / 3));
 
 			accumulator -= dt;
+			updateCount++;
 		}
 
 		const double alpha = accumulator / dt;
